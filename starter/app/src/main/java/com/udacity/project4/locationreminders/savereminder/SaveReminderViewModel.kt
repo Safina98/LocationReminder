@@ -3,6 +3,7 @@ package com.udacity.project4.locationreminders.savereminder
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PointOfInterest
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseViewModel
@@ -24,6 +25,15 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     /**
      * Clear the live data objects to start fresh next time the view model gets called
      */
+    fun setSelectedPoi(poi:PointOfInterest){
+        selectedPOI.value = poi
+        setSelectedPosition(poi.latLng,poi.name)
+    }
+    fun setSelectedPosition(pos:LatLng,name:String){
+        reminderSelectedLocationStr.value = name
+        latitude.value = pos.latitude
+        longitude.value = pos.longitude
+    }
     fun onClear() {
         reminderTitle.value = null
         reminderDescription.value = null
@@ -36,11 +46,6 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     /**
      * Validate the entered data then saves the reminder data to the DataSource
      */
-    fun validateAndSaveReminder(reminderData: ReminderDataItem) {
-        if (validateEnteredData(reminderData)) {
-            saveReminder(reminderData)
-        }
-    }
 
     /**
      * Save the reminder to the data source
@@ -72,11 +77,11 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
             showSnackBarInt.value = R.string.err_enter_title
             return false
         }
-
         if (reminderData.location.isNullOrEmpty()) {
             showSnackBarInt.value = R.string.err_select_location
             return false
         }
+
         return true
     }
 }

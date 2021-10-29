@@ -1,9 +1,15 @@
 package com.udacity.project4.locationreminders.reminderslist
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
+import com.firebase.ui.auth.AuthUI
 import com.udacity.project4.R
+import com.udacity.project4.authentication.LoginViewModel
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.databinding.FragmentRemindersBinding
@@ -16,6 +22,7 @@ class ReminderListFragment : BaseFragment() {
     //use Koin to retrieve the ViewModel instance
     override val _viewModel: RemindersListViewModel by viewModel()
     private lateinit var binding: FragmentRemindersBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -26,6 +33,7 @@ class ReminderListFragment : BaseFragment() {
                 R.layout.fragment_reminders, container, false
             )
         binding.viewModel = _viewModel
+
 
         setHasOptionsMenu(true)
         setDisplayHomeAsUpEnabled(false)
@@ -39,6 +47,23 @@ class ReminderListFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
+
+       // val navController = findNavController()
+        _viewModel.authenticationState.observe(viewLifecycleOwner, Observer { authenticationState ->
+            when (authenticationState) {
+                LoginViewModel.AuthenticationState.AUTHENTICATED -> Log.i("Login state", "Reminder Authenticated")
+                // If the user is not logged in, they should not be able to set any preferences,
+                // so navigate them to the login fragment
+              LoginViewModel.AuthenticationState.UNAUTHENTICATED ->
+                 // navController.navigate(R.id.loginFragment)
+                navigateToLogin()
+                else -> Log.e(
+                    "Login state", "Reminder New $authenticationState state that doesn't require any UI change"
+                )
+            }
+        })
+
+
         setupRecyclerView()
         binding.addReminderFAB.setOnClickListener {
             navigateToAddReminder()
@@ -60,6 +85,15 @@ class ReminderListFragment : BaseFragment() {
         )
     }
 
+    private fun navigateToLogin() {
+        //use the navigationCommand live data to navigate between the fragments
+        _viewModel.navigationCommand.postValue(
+                NavigationCommand.To(
+                        ReminderListFragmentDirections.actionReminderListFragmentToLoginFragment()
+                )
+        )
+    }
+
     private fun setupRecyclerView() {
         val adapter = RemindersListAdapter {
         }
@@ -71,7 +105,7 @@ class ReminderListFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.logout -> {
-//                TODO: add the logout implementation
+                AuthUI.getInstance().signOut(requireContext())
             }
         }
         return super.onOptionsItemSelected(item)

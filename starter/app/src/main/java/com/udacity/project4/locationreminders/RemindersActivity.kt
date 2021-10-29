@@ -3,6 +3,7 @@ package com.udacity.project4.locationreminders
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -21,6 +22,7 @@ class RemindersActivity : AppCompatActivity() {
         setContentView(R.layout.activity_reminders)
 
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {

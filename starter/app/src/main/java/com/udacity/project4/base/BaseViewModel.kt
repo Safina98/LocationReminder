@@ -11,11 +11,11 @@ import com.udacity.project4.utils.SingleLiveEvent
 abstract class BaseViewModel(app: Application) : AndroidViewModel(app) {
 
     val navigationCommand: SingleLiveEvent<NavigationCommand> = SingleLiveEvent()
-    val showErrorMessage: SingleLiveEvent<String> = SingleLiveEvent()
-    val showSnackBar: SingleLiveEvent<String> = SingleLiveEvent()
-    val showSnackBarInt: SingleLiveEvent<Int> = SingleLiveEvent()
-    val showToast: SingleLiveEvent<String> = SingleLiveEvent()
-    val showLoading: SingleLiveEvent<Boolean> = SingleLiveEvent()
-    val showNoData: MutableLiveData<Boolean> = MutableLiveData()
+    val showErrorMessage: SingleLiveEvent<String> = SingleLiveEvent() //tested in reminderlistViewmodel
+    val showSnackBar: SingleLiveEvent<String> = SingleLiveEvent()//tested in reminderlistViewmodel
+    val showSnackBarInt: SingleLiveEvent<Int> = SingleLiveEvent()//tested in reminderlistViewmodel
+    val showToast: SingleLiveEvent<String> = SingleLiveEvent() //tested in savereminderviewmodel
+    val showLoading: SingleLiveEvent<Boolean> = SingleLiveEvent()//tested in reminderlistViewmodel &savereminderViewModel
+    val showNoData: MutableLiveData<Boolean> = MutableLiveData() //tested in reminderlistViewmodel
 
 }
