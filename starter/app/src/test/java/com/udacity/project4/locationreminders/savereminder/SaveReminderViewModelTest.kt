@@ -103,7 +103,6 @@ class SaveReminderViewModelTest {
         var reminder = ReminderDataItem(String(),"desc","Location",0.0,0.0)
         //WHEN  validateEnteredData called
         val bool = saveReminderViewModel.validateEnteredData(reminder)
-
         //THEN bool is false and showSnackBarInt value updated
         assertThat(bool,`is`(false))
         assertThat(saveReminderViewModel.showSnackBarInt.getOrAwaitValue(),`is`(R.string.err_enter_title))
@@ -122,7 +121,7 @@ class SaveReminderViewModelTest {
     @Test
     fun checkEmptyLocation_validateEnteredDataReturnFalse(){
         //GIVEN ReminderDataItem with empty string location
-        var reminder = ReminderDataItem(String(),"desc",null,0.0,0.0)
+        var reminder = ReminderDataItem("Title","desc",String(),0.0,0.0)
         //WHEN validateEnteredData called
         val bool = saveReminderViewModel.validateEnteredData(reminder)
 
