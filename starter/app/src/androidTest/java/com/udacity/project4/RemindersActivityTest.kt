@@ -2,6 +2,8 @@ package com.udacity.project4
 
 import android.app.Activity
 import android.app.Application
+import android.os.Parcel
+import android.os.Parcelable
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.findNavController
 import androidx.test.core.app.ActivityScenario
@@ -42,13 +44,14 @@ import org.koin.test.get
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 //END TO END test to black box test the app
-class RemindersActivityTest :
+class RemindersActivityTest() :
     AutoCloseKoinTest() {// Extended Koin Test - embed autoclose @after method to close Koin after every test
 
     private lateinit var repository: ReminderDataSource
     private lateinit var appContext: Application
     // An idling resource that waits for Data Binding to have no pending bindings.
     private val dataBindingIdlingResource = DataBindingIdlingResource()
+
 
     /**
      * As we use Koin as a Service Locator Library to develop our code, we'll also use Koin to test our code.
@@ -95,6 +98,9 @@ class RemindersActivityTest :
     fun unregisterIdlingResource() {
         IdlingRegistry.getInstance().unregister(EspressoIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().unregister(dataBindingIdlingResource)
+        runBlocking {
+            repository.deleteAllReminders()
+        }
     }
 
     private fun getActivity(activityScenario: ActivityScenario<RemindersActivity>): Activity? {
@@ -168,6 +174,7 @@ class RemindersActivityTest :
         onView(withId(R.id.addReminderFAB)).check(matches(isDisplayed()))
         activityScenario.close()
     }
+
 
 
 }
