@@ -144,7 +144,8 @@ class SaveReminderViewModelTest {
         var reminder = ReminderDataItem("Reminder","desc","Location",0.0,0.0)
         //when saving reminder
         mainCoroutineRule.pauseDispatcher()
-        saveReminderViewModel.saveReminder(reminder)
+        saveReminderViewModel.setReminderDataItem(reminder)
+        saveReminderViewModel.saveReminder()
         //then show loading value is true
         assertThat(saveReminderViewModel.showLoading.getOrAwaitValue(),`is`(true))
         // after load finnished then show loading value is false and showToastValueUpdated
