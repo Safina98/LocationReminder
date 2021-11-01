@@ -2,6 +2,7 @@ package com.udacity.project4.locationreminders.savereminder
 
 import android.app.Application
 import android.content.Context
+import android.os.Build
 import android.provider.Settings.Global.getString
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
@@ -24,10 +25,11 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.core.context.stopKoin
+import org.robolectric.annotation.Config
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
-
+@Config(sdk = [Build.VERSION_CODES.O_MR1])
 class SaveReminderViewModelTest {
     private lateinit var saveReminderViewModel: SaveReminderViewModel
     private lateinit var tasksRepository: FakeDataSource

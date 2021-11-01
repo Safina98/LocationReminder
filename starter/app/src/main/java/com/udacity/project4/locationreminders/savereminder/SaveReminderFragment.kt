@@ -90,10 +90,6 @@ class SaveReminderFragment : BaseFragment() {
         //Geofencing client
         geofencingClient = LocationServices.getGeofencingClient(requireContext())
 
-        if (isPermissionGranted()==false){
-            requestForegroundAndBackgroundLocationPermissions()
-        }
-
 
         return binding.root
     }
@@ -124,7 +120,8 @@ class SaveReminderFragment : BaseFragment() {
                 //addNewGeofence(reminderDataItem)
                     if (isPermissionGranted()) {
                         checkDeviceLocationSettingsAndStartGeofence()
-                    }else{requestForegroundAndBackgroundLocationPermissions()}
+                    }else{requestForegroundAndBackgroundLocationPermissions()
+                    }
 
             }
         }
@@ -218,7 +215,7 @@ class SaveReminderFragment : BaseFragment() {
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK })
                 }.show()
         }else{
-            //checkDeviceLocationSettingsAndStartGeofence()
+            checkDeviceLocationSettingsAndStartGeofence()
         }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

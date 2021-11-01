@@ -39,7 +39,7 @@ import android.net.Uri
 import android.provider.Settings
 import com.udacity.project4.BuildConfig
 
-
+const val REQUEST_LOCATION_PERMISSION = 22
 class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
 
     private val runningQOrLater = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q
@@ -203,12 +203,34 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
 
     @SuppressLint("MissingPermission")
     private fun enableMyLocation() {
-        if (isPermissionGranted()) {
+        if (isLocationPermissionGranted()) {
             map.setMyLocationEnabled(true)
         }
         else {
+          requestPermissions(
+                arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
+                REQUEST_LOCATION_PERMISSION
+            )
             //requestForegroundAndBackgroundLocationPermissions()
         }
+    }
+    private fun isLocationPermissionGranted() : Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION) === PackageManager.PERMISSION_GRANTED
+    }
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray) {
+        // Check if location permissions are granted and if so enable the
+        // location data layer.
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.size > 0 && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                enableMyLocation()
+            }
+        }
+        Log.i("RESULTSELEXT","calledd")
     }
 
 
